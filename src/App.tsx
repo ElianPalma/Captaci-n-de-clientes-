@@ -8,6 +8,7 @@ import ROICalculator from './components/ROICalculator';
 import Pricing from './components/Pricing';
 import Methodology from './components/Methodology';
 import Footer from './components/Footer';
+import FloatingButtons from './components/FloatingButtons';
 
 function App() {
   const auditoriaRef = useRef<HTMLDivElement>(null);
@@ -30,6 +31,7 @@ function App() {
       <Pricing />
       <Methodology />
       <Footer />
+      <FloatingButtons />
     </div>
   );
 }
