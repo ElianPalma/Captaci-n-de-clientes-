@@ -1,212 +1,203 @@
 import { useState, useEffect } from 'react';
-import { Check, ArrowRight, X, Globe, ShoppingCart, LifeBuoy } from 'lucide-react';
+import { Check, ArrowRight, X, Globe, ShoppingCart, LifeBuoy, Sparkles, ShieldCheck, Palette, Headphones } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 const WHATSAPP_NUMBER = '5804128231012';
 
 interface Plan {
   name: string;
+  tag: string;
   price: string;
   priceNote?: string;
   description: string;
   features: string[];
   cta: string;
   popular?: boolean;
-  custom?: boolean;
+}
+
+interface CustomPlan {
+  name: string;
+  description: string;
+  chips: string[];
+  cta: string;
 }
 
 interface Category {
   id: string;
+  tabLabel: string;
   title: string;
   subtitle: string;
   icon: LucideIcon;
+  includes?: string[];
   plans: Plan[];
+  custom: CustomPlan;
 }
 
 // Ajusta aquí los precios de cada plan. "Consultar" indica cotización a medida.
 const categories: Category[] = [
   {
     id: 'web-informativa',
+    tabLabel: 'Web Informativa',
     title: 'Web Informativa',
     subtitle: 'Presencia profesional para captar clientes y generar autoridad.',
     icon: Globe,
     plans: [
       {
         name: 'Landing',
+        tag: '1 página',
         price: '$600',
-        description: 'Una página de alto impacto orientada a maximizar la captura de leads',
+        description: 'Una página de alto impacto pensada para captar leads.',
         features: [
-          'Diseño de interfaz exclusivo (Figma)',
-          'Desarrollo web frontend optimizado y adaptable a móvil',
-          'Formulario de contacto y botón de WhatsApp',
-          'Generación y medición de conversiones',
-          'Integración base con Google Analytics',
-          'Optimización de velocidad y SEO On-Page',
-          'Soporte técnico directo por 30 días',
+          'Diseño exclusivo en Figma',
+          'Rápida y adaptable a móvil',
+          'Formulario de contacto y WhatsApp',
+          'Google Analytics y medición de conversiones',
+          'SEO On-Page base',
+          'Soporte directo por 30 días',
         ],
         cta: 'Iniciar Proyecto',
       },
       {
-        name: 'Web Informativa de Varias Pestañas',
+        name: 'Web de Varias Pestañas',
+        tag: 'Multipágina',
         price: '$1,000',
-        description: 'Sitio web corporativo con varias secciones para establecer autoridad y captar clientes',
+        description: 'Sitio corporativo completo para ganar autoridad y captar clientes.',
         features: [
-          'Desarrollo de sitio web corporativo multipágina',
+          'Todo lo incluido en Landing',
+          'Sitio corporativo con varias secciones',
           'Analítica Server-Side (Google Tag Manager)',
-          'Medición de comportamiento (Mapas de calor)',
-          'Arquitectura para captación de clientes',
-          'Sistemas de conversión y embudos base',
-          'Optimización y soporte técnico por 30 días',
+          'Mapas de calor y comportamiento',
+          'Embudos de conversión base',
+          'Optimización y soporte por 30 días',
         ],
         cta: 'Solicitar Proyecto',
         popular: true,
       },
-      {
-        name: 'Plan Personalizado',
-        price: 'Consultar',
-        description: 'Desarrollo a medida: funcionalidades, integraciones y sistemas complejos',
-        features: [
-          'Desarrollo de SaaS y CRMs a medida',
-          'Arquitecturas de alto rendimiento (React)',
-          'Integraciones complejas mediante APIs',
-          'Sistemas de automatización de negocio',
-          'Infraestructura backend y bases de datos',
-          'Consultoría de arquitectura web completa',
-        ],
-        cta: 'Agendar Llamada Técnica',
-        custom: true,
-      },
     ],
+    custom: {
+      name: 'Plan Personalizado',
+      description: '¿Necesitas algo más específico? Desarrollo a medida con funcionalidades, integraciones y sistemas complejos.',
+      chips: ['SaaS y CRMs', 'Integraciones vía API', 'Automatizaciones', 'Backend y bases de datos'],
+      cta: 'Agendar Llamada Técnica',
+    },
   },
   {
     id: 'tienda-online',
+    tabLabel: 'Tienda Online',
     title: 'Tienda Online',
     subtitle: 'Tiendas a medida, optimizadas para vender y escalar tu facturación.',
     icon: ShoppingCart,
     plans: [
       {
         name: 'Tienda Tipo Landing',
+        tag: '1 página',
         price: 'Consultar',
-        description: 'Tienda compacta en una sola página, ideal para pocos productos o campañas',
+        description: 'Tienda compacta en una sola página, ideal para pocos productos o campañas.',
         features: [
-          'Catálogo compacto de productos en una sola página',
+          'Catálogo compacto de productos',
           'Carrito y checkout sin fricción',
-          'Integración segura de pasarelas de pago',
-          'Diseño de interfaz exclusivo (Figma)',
-          'Medición de conversiones y analítica base',
-          'Soporte técnico directo por 30 días',
+          'Pasarelas de pago seguras',
+          'Diseño exclusivo en Figma',
+          'Medición de conversiones',
+          'Soporte directo por 30 días',
         ],
         cta: 'Cotizar Tienda',
       },
       {
         name: 'Tienda de Varias Pestañas',
+        tag: 'E-commerce completo',
         price: '$1,500',
         priceNote: 'desde',
-        description: 'Tienda online completa a medida, optimizada para escalar facturación',
+        description: 'Tienda online completa a medida, pensada para escalar tu facturación.',
         features: [
-          'Desarrollo de catálogo por categorías y checkout sin fricción',
-          'GTM Server-Side nativo para E-commerce',
-          'Embudos de conversión para tiendas online',
-          'Análisis de carritos abandonados',
-          'Integración segura de pasarelas de pago',
+          'Catálogo por categorías y checkout sin fricción',
+          'GTM Server-Side para e-commerce',
+          'Embudos de conversión y carritos abandonados',
+          'Pasarelas de pago seguras',
           'Optimización continua y soporte técnico',
         ],
         cta: 'Cotizar Tienda',
         popular: true,
       },
-      {
-        name: 'Plan Personalizado',
-        price: 'Consultar',
-        description: 'Tienda con requerimientos especiales: integraciones, automatizaciones y más',
-        features: [
-          'Funcionalidades de tienda a medida',
-          'Integraciones con inventario, ERP o CRM',
-          'Automatización de pedidos y notificaciones',
-          'Arquitectura de alto rendimiento (React)',
-          'Infraestructura backend y bases de datos',
-          'Consultoría de arquitectura completa',
-        ],
-        cta: 'Agendar Llamada Técnica',
-        custom: true,
-      },
     ],
+    custom: {
+      name: 'Plan Personalizado',
+      description: '¿Tu tienda tiene requerimientos especiales? La construyo a medida con las integraciones que necesites.',
+      chips: ['Inventario / ERP / CRM', 'Automatización de pedidos', 'Funciones a medida', 'Alto rendimiento (React)'],
+      cta: 'Agendar Llamada Técnica',
+    },
   },
   {
     id: 'post-desarrollo',
+    tabLabel: 'Post Desarrollo',
     title: 'Post Desarrollo',
-    subtitle: 'Soporte técnico, accesibilidad y SEO orgánico para que tu sitio siga creciendo después del lanzamiento.',
+    subtitle: 'Soporte y SEO orgánico para que tu sitio siga creciendo después del lanzamiento.',
     icon: LifeBuoy,
+    includes: ['Soporte técnico', 'SEO orgánico', 'Accesibilidad', 'Reporte de métricas'],
     plans: [
       {
-        name: 'Post Desarrollo · Web Informativa Landing',
+        name: 'Web Informativa Landing',
+        tag: 'Para landing',
         price: 'Consultar',
-        description: 'Soporte y SEO orgánico para tu sitio informativo tipo landing',
+        description: 'Soporte y SEO para tu sitio informativo de una página.',
         features: [
-          'Soporte técnico y actualizaciones de contenido',
-          'Configuración de Analytics y Search Console',
-          'SEO On-Page: meta tags, estructura y velocidad',
-          'Optimización de accesibilidad',
-          'Reporte de métricas y recomendaciones',
+          'Actualizaciones de contenido',
+          'Analytics y Search Console',
+          'SEO On-Page: meta tags y velocidad',
         ],
         cta: 'Solicitar Plan',
       },
       {
-        name: 'Post Desarrollo · Web Informativa Varias Pestañas',
+        name: 'Web Informativa Varias Pestañas',
+        tag: 'Para multipágina',
         price: 'Consultar',
-        description: 'Soporte y SEO orgánico para tu sitio informativo multipágina',
+        description: 'Soporte y SEO para tu sitio informativo multipágina.',
         features: [
-          'Soporte técnico y actualizaciones de contenido',
-          'SEO On-Page por cada página del sitio',
+          'SEO On-Page por cada página',
           'Estrategia de palabras clave y contenido',
-          'Optimización de accesibilidad y velocidad',
-          'Medición de comportamiento (Mapas de calor)',
-          'Reporte de métricas y recomendaciones',
+          'Mapas de calor y comportamiento',
         ],
         cta: 'Solicitar Plan',
+        popular: true,
       },
       {
-        name: 'Post Desarrollo · Tienda Tipo Landing',
+        name: 'Tienda Tipo Landing',
+        tag: 'Para tienda landing',
         price: 'Consultar',
-        description: 'Soporte y SEO orgánico para tu tienda tipo landing',
+        description: 'Soporte y SEO para tu tienda de una sola página.',
         features: [
-          'Soporte técnico y mantenimiento de la tienda',
           'SEO de productos y página principal',
-          'Medición de conversiones y de compra',
-          'Optimización de accesibilidad y velocidad',
+          'Medición de conversiones y compra',
           'Revisión del proceso de checkout',
-          'Reporte de métricas y recomendaciones',
         ],
         cta: 'Solicitar Plan',
       },
       {
-        name: 'Post Desarrollo · Tienda de Varias Pestañas',
+        name: 'Tienda de Varias Pestañas',
+        tag: 'Para tienda completa',
         price: 'Consultar',
-        description: 'Soporte y SEO orgánico para tu tienda online completa',
+        description: 'Soporte y SEO para tu tienda online completa.',
         features: [
-          'Soporte técnico y mantenimiento de la tienda',
           'SEO de categorías y fichas de producto',
-          'Embudos de conversión y carritos abandonados',
+          'Embudos y carritos abandonados',
           'Eventos de compra con GTM Server-Side',
-          'Optimización de accesibilidad y velocidad',
-          'Reporte de métricas y recomendaciones',
         ],
         cta: 'Solicitar Plan',
-      },
-      {
-        name: 'Plan Personalizado',
-        price: 'Consultar',
-        description: 'Un plan de soporte, accesibilidad y SEO diseñado según las necesidades de tu proyecto',
-        features: [
-          'Alcance de soporte definido a tu medida',
-          'Estrategia de SEO orgánico personalizada',
-          'Configuración avanzada de métricas y analítica',
-          'Optimización de accesibilidad y rendimiento',
-        ],
-        cta: 'Agendar Llamada',
-        custom: true,
       },
     ],
+    custom: {
+      name: 'Plan Personalizado',
+      description: 'Un plan de soporte, accesibilidad y SEO diseñado según las necesidades de tu proyecto.',
+      chips: ['Alcance a tu medida', 'SEO personalizado', 'Métricas avanzadas', 'Rendimiento'],
+      cta: 'Agendar Llamada',
+    },
   },
+];
+
+const trustItems = [
+  { icon: Palette, text: 'Diseño 100% a medida' },
+  { icon: ShieldCheck, text: 'Pago 50% inicial · 50% al finalizar' },
+  { icon: Headphones, text: 'Soporte directo conmigo' },
 ];
 
 const countryCodes = [
@@ -241,77 +232,84 @@ const whatsappLink = (categoryTitle: string, planName: string) => {
 interface PlanCardProps {
   plan: Plan;
   categoryTitle: string;
+  isPost: boolean;
+  includes?: string[];
   onSelect: (planLabel: string) => void;
 }
 
-function PlanCard({ plan, categoryTitle, onSelect }: PlanCardProps) {
+function PlanCard({ plan, categoryTitle, isPost, includes, onSelect }: PlanCardProps) {
   const isConsult = plan.price === 'Consultar';
 
-  return (
-    <div
-      className={`relative bg-slate-800 rounded-2xl p-5 sm:p-6 transition-all duration-300 flex flex-col h-full ${
-        plan.popular
-          ? 'border-2 border-cyan-500 shadow-xl shadow-cyan-500/20 md:-translate-y-2'
-          : 'border border-slate-700'
-      }`}
-    >
+  const inner = (
+    <div className="relative h-full bg-slate-900 rounded-[15px] p-6 sm:p-7 flex flex-col">
       {plan.popular && (
-        <div className="absolute -top-3.5 left-1/2 transform -translate-x-1/2 w-max z-10">
-          <span className="bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-900 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
-            Recomendado
-          </span>
-        </div>
+        <span className="absolute top-5 right-5 inline-flex items-center gap-1 bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-900 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">
+          <Sparkles className="w-3 h-3" /> Recomendado
+        </span>
       )}
 
-      <div className="mb-5 sm:mb-6 flex-grow-0 mt-2">
-        <h4 className="text-lg sm:text-xl font-bold text-white mb-2 leading-snug">{plan.name}</h4>
-        <div className="flex items-baseline gap-1 mb-2">
-          {plan.priceNote && (
-            <span className="text-slate-400 text-xs sm:text-sm uppercase font-medium">{plan.priceNote}</span>
-          )}
-          <span
-            className={`font-bold text-white tracking-tight ${isConsult ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'}`}
-          >
-            {plan.price}
-          </span>
-        </div>
-        <p className="text-slate-400 text-sm leading-relaxed">{plan.description}</p>
-      </div>
+      <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400 mb-2">{plan.tag}</span>
+      <h4 className={`text-xl sm:text-2xl font-bold text-white leading-snug mb-2 ${plan.popular ? 'pr-0 mt-6 sm:mt-0 sm:pr-32' : ''}`}>
+        {plan.name}
+      </h4>
+      <p className="text-slate-400 text-sm leading-relaxed mb-6">{plan.description}</p>
 
-      <div className="flex-grow mt-4 sm:mt-0">
-        <ul className="space-y-3 sm:space-y-4 mb-8">
-          {plan.features.map((feature) => (
-            <li key={feature} className="flex items-start gap-2 sm:gap-3">
-              <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-              <span className="text-slate-300 text-sm leading-tight">{feature}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="mt-auto">
-        {plan.custom ? (
-          <a
-            href={whatsappLink(categoryTitle, plan.name)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full py-3.5 sm:py-4 rounded-xl font-semibold flex items-center justify-center gap-2 bg-slate-700/50 border border-slate-600 text-white hover:bg-slate-700 transition-colors text-sm sm:text-base active:scale-[0.98]"
-          >
-            {plan.cta} <ArrowRight className="w-4 h-4" />
-          </a>
+      <div className="mb-6 pb-6 border-b border-slate-800">
+        {isConsult ? (
+          <>
+            <div className="text-3xl font-bold text-white tracking-tight">Consultar</div>
+            <div className="text-xs text-slate-500 mt-1">Cotización según tu proyecto</div>
+          </>
         ) : (
-          <button
-            onClick={() => onSelect(`${plan.name} (${categoryTitle})`)}
-            className={`w-full py-3.5 sm:py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all duration-300 text-sm sm:text-base active:scale-[0.98] ${
-              plan.popular
-                ? 'bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-900 shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-cyan-500/50'
-                : 'bg-slate-700/50 border border-slate-600 text-white hover:bg-slate-700'
-            }`}
-          >
-            {plan.cta} <ArrowRight className="w-4 h-4" />
-          </button>
+          <>
+            <div className="flex items-baseline gap-2">
+              {plan.priceNote && <span className="text-slate-400 text-sm font-medium">{plan.priceNote}</span>}
+              <span className="text-4xl sm:text-5xl font-bold text-white tracking-tight">{plan.price}</span>
+              <span className="text-slate-500 text-sm">USD</span>
+            </div>
+            <div className="text-xs text-slate-500 mt-1">Pago único por proyecto</div>
+          </>
         )}
       </div>
+
+      {isPost && includes && (
+        <p className="text-xs text-slate-500 mb-4">Incluye {includes.join(', ').toLowerCase()} y además:</p>
+      )}
+
+      <ul className="space-y-3 mb-8 flex-grow">
+        {plan.features.map((feature) => (
+          <li key={feature} className="flex items-start gap-3">
+            <span className="mt-0.5 w-5 h-5 rounded-full bg-emerald-500/15 flex items-center justify-center shrink-0">
+              <Check className="w-3 h-3 text-emerald-400" strokeWidth={3} />
+            </span>
+            <span className="text-slate-300 text-sm leading-snug">{feature}</span>
+          </li>
+        ))}
+      </ul>
+
+      <button
+        onClick={() => onSelect(`${plan.name} (${categoryTitle})`)}
+        className={`w-full py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all duration-300 text-sm sm:text-base active:scale-[0.98] ${
+          plan.popular
+            ? 'bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-900 shadow-[0_0_20px_rgba(6,182,212,0.25)] hover:shadow-cyan-500/50'
+            : 'bg-slate-800 border border-slate-700 text-white hover:bg-slate-700 hover:border-cyan-500/40'
+        }`}
+      >
+        {plan.cta} <ArrowRight className="w-4 h-4" />
+      </button>
+    </div>
+  );
+
+  // Borde con degradado para el plan recomendado
+  return (
+    <div
+      className={`rounded-2xl p-px h-full transition-transform duration-300 hover:-translate-y-1 ${
+        plan.popular
+          ? 'bg-gradient-to-b from-cyan-500 to-emerald-500 shadow-xl shadow-cyan-500/10'
+          : 'bg-slate-700/60 hover:bg-slate-600'
+      }`}
+    >
+      {inner}
     </div>
   );
 }
@@ -389,10 +387,18 @@ export default function Pricing() {
     }
   };
 
+  const [activeTab, setActiveTab] = useState(categories[0].id);
+
   return (
-    <section id="precios" className="py-16 sm:py-20 px-4 sm:px-6 bg-slate-900 relative">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12 sm:mb-16">
+    <section id="precios" className="py-20 sm:py-28 px-4 sm:px-6 bg-slate-900 relative overflow-hidden">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent"></div>
+      <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[40rem] h-[20rem] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div className="max-w-6xl mx-auto relative">
+        <div className="text-center mb-10 sm:mb-12">
+          <div className="inline-block mb-4 px-4 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-full">
+            <span className="text-cyan-400 text-xs sm:text-sm font-medium tracking-wide">Planes y precios</span>
+          </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 leading-tight">
             Planes de <span className="text-cyan-400 block sm:inline">Desarrollo Web</span>
           </h2>
@@ -401,62 +407,112 @@ export default function Pricing() {
           </p>
         </div>
 
-        <div className="space-y-16 sm:space-y-20">
-          {categories.map((category) => {
-            // Con más de 3 planes, el plan personalizado se muestra como banner de ancho completo
-            const customBanner = category.plans.length > 3 ? category.plans.find((p) => p.custom) : undefined;
-            const gridPlans = customBanner ? category.plans.filter((p) => p !== customBanner) : category.plans;
-
-            return (
-              <div key={category.id} id={category.id}>
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-8 sm:mb-10">
-                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-cyan-500/20 shrink-0">
-                    <category.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl sm:text-3xl font-bold text-white leading-tight">{category.title}</h3>
-                    <p className="text-slate-400 text-sm sm:text-base mt-1 max-w-3xl">{category.subtitle}</p>
-                  </div>
-                </div>
-
-                <div
-                  className={`grid grid-cols-1 gap-6 ${
-                    customBanner ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-2 lg:grid-cols-3'
+        {/* Selector de categoría */}
+        <div className="flex justify-center mb-10 sm:mb-12">
+          <div role="tablist" aria-label="Categorías de planes" className="grid grid-cols-3 sm:inline-flex gap-1 p-1.5 bg-slate-800/80 border border-slate-700 rounded-2xl backdrop-blur w-full sm:w-auto">
+            {categories.map((category) => {
+              const active = activeTab === category.id;
+              return (
+                <button
+                  key={category.id}
+                  role="tab"
+                  aria-selected={active}
+                  aria-controls={`panel-${category.id}`}
+                  id={`tab-${category.id}`}
+                  onClick={() => setActiveTab(category.id)}
+                  className={`flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-6 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 ${
+                    active
+                      ? 'bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-900 shadow-lg shadow-cyan-500/20'
+                      : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
                   }`}
                 >
-                  {gridPlans.map((plan) => (
-                    <PlanCard key={plan.name} plan={plan} categoryTitle={category.title} onSelect={openModal} />
+                  <category.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="text-center leading-tight">{category.tabLabel}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {categories.map((category) => {
+          const isPost = category.id === 'post-desarrollo';
+          return (
+            <div
+              key={category.id}
+              id={`panel-${category.id}`}
+              role="tabpanel"
+              aria-labelledby={`tab-${category.id}`}
+              className={activeTab === category.id ? 'block' : 'hidden'}
+            >
+              <div className="text-center mb-8 sm:mb-10">
+                <h3 className="text-xl sm:text-2xl font-bold text-white">{category.title}</h3>
+                <p className="text-slate-400 text-sm sm:text-base mt-2 max-w-2xl mx-auto">{category.subtitle}</p>
+              </div>
+
+              {isPost && category.includes && (
+                <div className="flex flex-wrap justify-center gap-2 mb-8">
+                  {category.includes.map((item) => (
+                    <span key={item} className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
+                      <Check className="w-3.5 h-3.5" strokeWidth={3} /> {item}
+                    </span>
                   ))}
                 </div>
+              )}
 
-                {customBanner && (
-                  <div className="mt-6 bg-slate-800 border border-slate-700 rounded-2xl p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-8">
-                    <div className="lg:w-1/3">
-                      <h4 className="text-lg sm:text-xl font-bold text-white mb-1">{customBanner.name}</h4>
-                      <span className="text-2xl sm:text-3xl font-bold text-white tracking-tight">{customBanner.price}</span>
-                      <p className="text-slate-400 text-sm leading-relaxed mt-2">{customBanner.description}</p>
-                    </div>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
-                      {customBanner.features.map((feature) => (
-                        <li key={feature} className="flex items-start gap-2 sm:gap-3">
-                          <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                          <span className="text-slate-300 text-sm leading-tight">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <a
-                      href={whatsappLink(category.title, customBanner.name)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="lg:w-56 py-3.5 sm:py-4 px-5 rounded-xl font-semibold flex items-center justify-center gap-2 bg-slate-700/50 border border-slate-600 text-white hover:bg-slate-700 transition-colors text-sm sm:text-base active:scale-[0.98]"
-                    >
-                      {customBanner.cta} <ArrowRight className="w-4 h-4" />
-                    </a>
-                  </div>
-                )}
+              <div
+                className={`grid grid-cols-1 gap-6 mx-auto ${
+                  isPost ? 'md:grid-cols-2 lg:grid-cols-4 max-w-6xl' : 'md:grid-cols-2 max-w-4xl'
+                }`}
+              >
+                {category.plans.map((plan) => (
+                  <PlanCard
+                    key={plan.name}
+                    plan={plan}
+                    categoryTitle={category.title}
+                    isPost={isPost}
+                    includes={category.includes}
+                    onSelect={openModal}
+                  />
+                ))}
               </div>
-            );
-          })}
+
+              {/* Plan personalizado */}
+              <div className={`mt-6 mx-auto rounded-2xl border border-dashed border-slate-600 bg-slate-800/40 p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center gap-6 ${isPost ? 'max-w-6xl' : 'max-w-4xl'}`}>
+                <div className="flex-1">
+                  <div className="flex flex-wrap items-center gap-3 mb-2">
+                    <h4 className="text-lg sm:text-xl font-bold text-white">{category.custom.name}</h4>
+                    <span className="text-xs font-semibold text-slate-300 bg-slate-700/60 px-3 py-1 rounded-full">Consultar</span>
+                  </div>
+                  <p className="text-slate-400 text-sm leading-relaxed mb-4 max-w-xl">{category.custom.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {category.custom.chips.map((chip) => (
+                      <span key={chip} className="text-xs text-slate-300 bg-slate-900/70 border border-slate-700 px-3 py-1 rounded-full">
+                        {chip}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <a
+                  href={whatsappLink(category.title, category.custom.name)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="lg:w-64 py-3.5 px-5 rounded-xl font-semibold flex items-center justify-center gap-2 bg-slate-800 border border-slate-600 text-white hover:bg-slate-700 hover:border-cyan-500/40 transition-colors text-sm sm:text-base active:scale-[0.98]"
+                >
+                  {category.custom.cta} <ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Garantías */}
+        <div className="mt-12 sm:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
+          {trustItems.map((item) => (
+            <div key={item.text} className="flex items-center justify-center gap-3 text-slate-400 text-sm">
+              <item.icon className="w-5 h-5 text-cyan-400 shrink-0" />
+              <span>{item.text}</span>
+            </div>
+          ))}
         </div>
       </div>
 

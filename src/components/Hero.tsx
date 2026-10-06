@@ -11,6 +11,18 @@ export default function Hero({ onCtaClick }: HeroProps) {
       {/* Fondo base */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
 
+      {/* Retícula sutil para un look más técnico y moderno */}
+      <div
+        className="absolute inset-0 opacity-[0.07] pointer-events-none"
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, #94a3b8 1px, transparent 1px), linear-gradient(to bottom, #94a3b8 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+          maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 75%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at center, black 30%, transparent 75%)',
+        }}
+      ></div>
+
       {/* Efectos de iluminación ajustados para no causar overflow en móvil */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-64 md:w-96 h-64 md:h-96 bg-cyan-500 rounded-full filter blur-3xl animate-pulse"></div>
